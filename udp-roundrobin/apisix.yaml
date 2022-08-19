@@ -1,0 +1,11 @@
+stream_routes:
+  - id: 1
+    upstream_id: 1
+
+upstreams:
+  - nodes:
+      "server1:7000": 10
+      "server2:7000": 20
+    type: roundrobin
+    id: 1
+#END

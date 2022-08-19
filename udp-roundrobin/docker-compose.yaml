@@ -1,0 +1,36 @@
+# create docker network named 'apisix-examples'
+version: "3"
+services:
+  udp-server-1:
+    hostname: server1
+    environment:
+      - HOST=server1
+    image: lsy/udp-echo-server
+    networks:
+      - apisix-example
+    ports:
+      - "7010:7000/udp"
+  udp-server-2:
+    hostname: server2
+    environment:
+      - HOST=server2
+    image: lsy/udp-echo-server
+    networks:
+      - apisix-example
+    ports:
+      - "7020:7000/udp"
+  apisix:
+    image: apache/apisix:latest
+    networks:
+      - apisix-example
+    ports:
+      - "9100:9100/tcp"
+      - "9200:9200/udp"
+    volumes:
+      - ./apisix_log:/usr/local/apisix/logs
+      - ./config.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ./apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
+
+networks:
+  apisix-example:
+    driver: bridge
